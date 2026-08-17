@@ -802,6 +802,70 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .band-dark .quote { border-left-color: var(--on-dark-2); }
 .band-dark .quote figcaption { color: var(--on-dark-2); }
 
+/* --------------------------------------------------------------------------
+   Statement — ingekaderd uitspraakpaneel op lichte grond.
+   Bewust een ander type element dan de donkergroene banden, zodat twee
+   groene vlakken nooit tegen elkaar aan komen te liggen.
+   -------------------------------------------------------------------------- */
+.statement {
+  position: relative;
+  margin: 0;
+  display: grid;
+  gap: clamp(1.25rem, 2.5vw, 1.75rem);
+  padding: clamp(2.25rem, 5vw, 3.5rem) clamp(1.5rem, 4vw, 3.5rem);
+  background: var(--paper-2);
+  border-top: 3px solid var(--maroon);
+  border-bottom: 1px solid var(--rule);
+  overflow: hidden;
+}
+
+/* Decoratief aanhalingsteken, rechtsboven, ver op de achtergrond.
+   line-height 0.72 laat de box om de inkt heen vallen, zodat de bovenkant
+   van het teken niet door de overflow van het paneel wordt afgesneden. */
+.statement__glyph {
+  position: absolute;
+  top: clamp(1rem, 2.5vw, 1.75rem);
+  right: clamp(1rem, 3vw, 2.5rem);
+  font-family: var(--font-display);
+  font-size: clamp(6rem, 15vw, 11rem);
+  line-height: 0.72;
+  color: var(--maroon);
+  opacity: 0.09;
+  pointer-events: none;
+  user-select: none;
+}
+
+.statement__text {
+  position: relative;
+  z-index: 1;
+  max-width: 40ch;
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  line-height: 1.24;
+  letter-spacing: -0.018em;
+  color: var(--ink);
+}
+
+.statement__by {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--maroon);
+}
+.statement__by::before {
+  content: "";
+  width: 2rem;
+  height: 2px;
+  background: var(--maroon);
+  flex: none;
+}
+
 /* Vinklijst */
 .ticks { display: grid; gap: 0.85rem; }
 .ticks li {
