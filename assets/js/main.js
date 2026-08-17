@@ -71,76 +71,32 @@
   }
 
   /* ----------------------------------------------------------------------
-     4. Onthulling bij scroll (IntersectionObserver)
+     4. Onthulling bij scroll — één korte fade, zonder vertragingen
      ---------------------------------------------------------------------- */
-  var revealables = $$('[data-reveal], [data-wipe], .reveal-lines');
+  var revealables = $$('[data-reveal]');
 
-  if (!('IntersectionObserver' in window)) {
+  if (!('IntersectionObserver' in window) || reduceMotion.matches) {
     revealables.forEach(function (el) { el.classList.add('is-in'); });
   } else {
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (!entry.isIntersecting) return;
-        var el = entry.target;
-        var delay = parseInt(el.getAttribute('data-delay') || '0', 10);
-        if (delay && !reduceMotion.matches) {
-          el.style.transitionDelay = delay + 'ms';
-        }
-        el.classList.add('is-in');
-        io.unobserve(el);
+        entry.target.classList.add('is-in');
+        io.unobserve(entry.target);
       });
-    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.12 });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
 
     revealables.forEach(function (el) { io.observe(el); });
-  }
 
-  /* Automatische stagger binnen een groep */
-  $$('[data-stagger]').forEach(function (group) {
-    var stepMs = parseInt(group.getAttribute('data-stagger') || '90', 10);
-    $$('[data-reveal]', group).forEach(function (el, i) {
-      if (!el.hasAttribute('data-delay')) el.setAttribute('data-delay', String(i * stepMs));
-    });
-  });
-
-  /* ----------------------------------------------------------------------
-     5. Parallax — subtiel, alleen transform
-     ---------------------------------------------------------------------- */
-  var parallaxEls = $$('[data-parallax]');
-  if (parallaxEls.length && !reduceMotion.matches) {
-    onFrame(function () {
-      var vh = window.innerHeight;
-      parallaxEls.forEach(function (el) {
-        var rect = el.getBoundingClientRect();
-        if (rect.bottom < -vh || rect.top > vh * 2) return;
-        var speed = parseFloat(el.getAttribute('data-parallax')) || 0.12;
-        var offset = (rect.top + rect.height / 2 - vh / 2) * -speed;
-        el.style.transform = 'translate3d(0,' + offset.toFixed(2) + 'px,0)';
-      });
-    });
+    /* Vangnet: wat na 3 seconden nog verborgen is, wordt alsnog getoond.
+       Zo blijft er nooit iets onzichtbaar staan als de observer faalt. */
+    window.setTimeout(function () {
+      revealables.forEach(function (el) { el.classList.add('is-in'); });
+    }, 3000);
   }
 
   /* ----------------------------------------------------------------------
-     6. Ticker — horizontale verschuiving gestuurd door scrollpositie
-     ---------------------------------------------------------------------- */
-  var tickers = $$('.ticker');
-  if (tickers.length && !reduceMotion.matches) {
-    onFrame(function () {
-      var vh = window.innerHeight;
-      tickers.forEach(function (t) {
-        var track = $('.ticker__track', t);
-        if (!track) return;
-        var rect = t.getBoundingClientRect();
-        if (rect.bottom < 0 || rect.top > vh) return;
-        /* 0 → 1 terwijl de strook door beeld beweegt */
-        var p = 1 - (rect.top + rect.height) / (vh + rect.height);
-        var travel = Math.max(0, track.scrollWidth / 2);
-        track.style.transform = 'translate3d(' + (-p * travel * 0.6).toFixed(2) + 'px,0,0)';
-      });
-    });
-  }
-
-  /* ----------------------------------------------------------------------
-     7. Mobiele navigatie — komt van rechts, vertrekt naar rechts
+     5. Mobiele navigatie — komt van rechts, vertrekt naar rechts
      ---------------------------------------------------------------------- */
   var burger = $('.burger');
   var mobileNav = $('.mobile-nav');
@@ -175,7 +131,7 @@
   }
 
   /* ----------------------------------------------------------------------
-     8. Accordeon — hoogte-animatie vanaf de gemeten waarde
+     6. Accordeon — hoogte-animatie vanaf de gemeten waarde
      ---------------------------------------------------------------------- */
   $$('.accordion').forEach(function (acc) {
     var single = acc.hasAttribute('data-single');
@@ -219,7 +175,7 @@
   });
 
   /* ----------------------------------------------------------------------
-     9. Scrollspy (Diensten)
+     7. Scrollspy (Diensten)
      ---------------------------------------------------------------------- */
   var spyLinks = $$('.spy__link');
   if (spyLinks.length && 'IntersectionObserver' in window) {
@@ -240,7 +196,7 @@
   }
 
   /* ----------------------------------------------------------------------
-     10. Contactformulier
+     8. Contactformulier
      Geen backend: bij een geldige invoer wordt een vooringevuld e-mailbericht
      geopend. Vervang dit door een POST naar een eigen endpoint zodra dat er is.
      ---------------------------------------------------------------------- */
@@ -340,7 +296,7 @@
   }
 
   /* ----------------------------------------------------------------------
-     11. Actieve navigatie markeren
+     9. Actieve navigatie markeren
      ---------------------------------------------------------------------- */
   var here = location.pathname.split('/').pop() || 'index.html';
   $$('[data-nav]').forEach(function (link) {

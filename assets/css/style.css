@@ -31,7 +31,12 @@
 
   --rule:         rgba(16, 20, 15, 0.14);
   --rule-soft:    rgba(16, 20, 15, 0.08);
-  --rule-invert:  rgba(255, 255, 255, 0.20);
+  --rule-invert:  rgba(255, 255, 255, 0.28);
+
+  /* Tekst op donkergroen — dekkende tinten, geen lage alpha.
+     Grijs met doorzichtigheid valt op mobiele schermen weg. */
+  --on-dark:      #E8F1E4;
+  --on-dark-2:    #BFD4B8;
 
   /* Typografie */
   --font-display: "Iowan Old Style", "Palatino Linotype", "Book Antiqua",
@@ -156,8 +161,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .eyebrow--plain::before { display: none; }
 .eyebrow--green { color: var(--green); }
 .eyebrow--green::before { background: var(--green); }
-.eyebrow--invert { color: rgba(255,255,255,0.82); }
-.eyebrow--invert::before { background: rgba(255,255,255,0.55); }
+.eyebrow--invert { color: var(--on-dark); }
+.eyebrow--invert::before { background: var(--on-dark-2); }
 
 .muted { color: var(--ink-2); }
 .measure { max-width: 34em; }
@@ -220,14 +225,21 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 .row { display: flex; flex-wrap: wrap; gap: 0.85rem; align-items: center; }
 
-/* Donkere secties */
+/* Donkere secties — de CTA-band valt onder dezelfde tekstregels */
 .band-dark {
   background: var(--green-dark);
   color: var(--white);
 }
 .band-dark .muted,
-.band-dark .lead { color: rgba(255, 255, 255, 0.72); }
-.band-dark .rule { background: var(--rule-invert); }
+.band-dark .lead,
+.cta .muted,
+.cta .lead {
+  color: var(--on-dark);
+}
+.band-dark .rule,
+.cta .rule { background: var(--rule-invert); }
+.band-dark a:not(.btn):not(.link),
+.cta a:not(.btn):not(.link) { color: var(--white); }
 
 .band-tint { background: var(--paper-2); }
 .band-green-tint { background: var(--green-tint); }
@@ -543,7 +555,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   width: min(58vw, 40rem);
   opacity: 0.05;
   pointer-events: none;
-  will-change: transform;
 }
 
 .hero__inner { position: relative; z-index: 2; }
@@ -582,42 +593,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   letter-spacing: -0.01em;
 }
 
-.scroll-cue {
-  position: absolute;
-  left: var(--bleed);
-  bottom: 1.75rem;
-  z-index: 3;
-  display: none;
-  align-items: center;
-  gap: 0.8rem;
-  font-size: var(--step--1);
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-}
-@media (min-width: 62rem) { .scroll-cue { display: flex; } }
-.scroll-cue__track {
-  position: relative;
-  width: 1px;
-  height: 3.5rem;
-  background: var(--rule);
-  overflow: hidden;
-}
-.scroll-cue__track::after {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 40%;
-  background: var(--green);
-  animation: cue 2.4s var(--ease-out) infinite;
-}
-@keyframes cue {
-  0%   { transform: translateY(-100%); }
-  60%  { transform: translateY(250%); }
-  100% { transform: translateY(250%); }
-}
-
 /* Compacte pagina-hero voor subpagina's */
 .page-hero {
   position: relative;
@@ -639,7 +614,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   -webkit-mask-image: radial-gradient(120% 100% at 80% 0%, #000 0%, transparent 75%);
 }
 .page-hero__inner { position: relative; z-index: 2; display: grid; gap: 1.5rem; }
-.page-hero .lead { color: rgba(255,255,255,0.74); }
+.page-hero .lead { color: var(--on-dark); }
 
 .crumbs {
   display: flex;
@@ -647,13 +622,14 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   align-items: center;
   gap: 0.6rem;
   font-size: var(--step--1);
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.55);
+  color: var(--on-dark-2);
 }
 .crumbs a { transition: color var(--t-fast) var(--ease-out); }
 .crumbs a:hover { color: #fff; }
-.crumbs span[aria-hidden] { color: rgba(255,255,255,0.32); }
+.crumbs span[aria-hidden] { color: rgba(255,255,255,0.5); }
 
 /* --------------------------------------------------------------------------
    8. Kaarten & UI-elementen
@@ -666,27 +642,10 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   padding: clamp(1.6rem, 3vw, 2.25rem);
   background: var(--white);
   border: 1px solid var(--rule);
-  overflow: hidden;
-  transition: transform var(--t-base) var(--spring),
-              border-color var(--t-base) var(--ease-out);
+  transition: border-color var(--t-fast) var(--ease-out),
+              background var(--t-fast) var(--ease-out);
 }
-/* Groene vulling wipet omhoog vanaf de onderrand */
-.card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--green-dark);
-  transform: scaleY(0);
-  transform-origin: bottom;
-  transition: transform 480ms var(--spring);
-  z-index: 0;
-}
-.card > * { position: relative; z-index: 1; }
-.card:hover { transform: translateY(-4px); border-color: var(--green-dark); }
-.card:hover::before { transform: scaleY(1); }
-.card:hover, .card:hover .card__text, .card:hover .card__index { color: #fff; }
-.card:hover .card__index { color: rgba(255,255,255,0.5); }
-.card:hover .link { color: #fff; }
+.card:hover { border-color: var(--green); background: var(--green-tint); }
 
 .card__index {
   font-family: var(--font-sans);
@@ -701,8 +660,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 .card--link { cursor: pointer; }
 .card--flat { background: transparent; }
-.card--flat::before { display: none; }
-.card--flat:hover { transform: none; border-color: var(--rule); }
+.card--flat:hover { border-color: var(--rule); background: transparent; }
 
 /* Pijler / feature-blok zonder hoverfill */
 .pillar {
@@ -719,8 +677,10 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   text-transform: uppercase;
   color: var(--maroon);
 }
-.band-dark .pillar { border-top-color: rgba(255,255,255,0.55); }
-.band-dark .pillar__k { color: rgba(255,255,255,0.62); }
+.band-dark .pillar,
+.cta .pillar { border-top-color: var(--on-dark-2); }
+.band-dark .pillar__k,
+.cta .pillar__k { color: var(--on-dark-2); }
 
 /* Geometrisch beeldblok (vervangbaar door foto) */
 .art {
@@ -769,12 +729,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   color: var(--ink-2);
 }
 
-/* Vierkante wipe-onthulling voor beeldblokken */
-[data-wipe] {
-  clip-path: inset(0 100% 0 0);
-  transition: clip-path 900ms var(--ease-out);
-}
-[data-wipe].is-in { clip-path: inset(0 0 0 0); }
+/* Beeldblokken zijn altijd zichtbaar: geen clip-path, geen JS-afhankelijkheid.
+   De eerdere wipe bleef op sommige browsers (Windows) dichtgeklapt staan. */
 
 /* Genummerde lijst met scrollgevoelige lijn */
 .steps { display: grid; gap: 0; position: relative; }
@@ -843,8 +799,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   text-transform: uppercase;
   color: var(--ink-3);
 }
-.band-dark .quote { border-left-color: rgba(255,255,255,0.6); }
-.band-dark .quote figcaption { color: rgba(255,255,255,0.6); }
+.band-dark .quote { border-left-color: var(--on-dark-2); }
+.band-dark .quote figcaption { color: var(--on-dark-2); }
 
 /* Vinklijst */
 .ticks { display: grid; gap: 0.85rem; }
@@ -863,40 +819,60 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   background: var(--green);
   flex: none;
 }
-.band-dark .ticks li { color: rgba(255,255,255,0.78); }
-.band-dark .ticks li::before { background: #fff; }
+.band-dark .ticks li,
+.cta .ticks li { color: var(--on-dark); }
+.band-dark .ticks li::before,
+.cta .ticks li::before { background: var(--on-dark-2); }
 
-/* Marquee-strook, gestuurd door scroll */
-.ticker {
-  position: relative;
-  padding-block: clamp(1.25rem, 3vw, 2rem);
-  border-block: 1px solid var(--rule);
-  overflow: hidden;
-  background: var(--paper);
-}
-.ticker__track {
-  display: flex;
-  gap: 3rem;
-  width: max-content;
-  will-change: transform;
-}
-.ticker__item {
-  display: flex;
+/* --------------------------------------------------------------------------
+   Tegel-knop — compacte doorverwijzing naar een andere pagina.
+   Eén titel, één regel tekst, verder niets. Gebruikt op de homepagina.
+   -------------------------------------------------------------------------- */
+.tile {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 3rem;
+  gap: 0.5rem 1.25rem;
+  padding: clamp(1.25rem, 2.5vw, 1.75rem);
+  background: var(--white);
+  border: 1px solid var(--rule);
+  transition: border-color var(--t-fast) var(--ease-out),
+              background var(--t-fast) var(--ease-out);
+}
+.tile:hover { border-color: var(--green); background: var(--green-tint); }
+.tile:active { background: var(--paper-2); }
+
+.tile__title {
   font-family: var(--font-display);
   font-size: var(--step-2);
-  letter-spacing: -0.012em;
+  line-height: 1.2;
+  letter-spacing: -0.014em;
   color: var(--ink);
-  white-space: nowrap;
 }
-.ticker__item::after {
-  content: "";
-  width: 0.55rem;
-  height: 0.55rem;
-  background: var(--maroon);
+.tile__text {
+  grid-column: 1 / -1;
+  font-size: var(--step--1);
+  line-height: 1.5;
+  color: var(--ink-2);
+  max-width: 42ch;
+}
+.tile__arrow {
+  width: 1.35rem;
   flex: none;
+  color: var(--green);
+  transition: transform var(--t-fast) var(--ease-out);
 }
+.tile:hover .tile__arrow { transform: translateX(0.25rem); }
+
+/* Variant op donkere grond */
+.tile--dark {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--rule-invert);
+}
+.tile--dark:hover { background: rgba(255, 255, 255, 0.12); border-color: var(--on-dark-2); }
+.tile--dark .tile__title { color: var(--white); }
+.tile--dark .tile__text { color: var(--on-dark); }
+.tile--dark .tile__arrow { color: var(--on-dark); }
 
 /* Accordeon */
 .accordion { border-top: 1px solid var(--rule); }
@@ -1130,10 +1106,9 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   right: -4%;
   bottom: -30%;
   width: min(46vw, 32rem);
-  opacity: 0.08;
+  opacity: 0.10;
   filter: brightness(0) invert(1);
   pointer-events: none;
-  will-change: transform;
 }
 .cta__inner { position: relative; z-index: 2; }
 
@@ -1220,37 +1195,21 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 /* --------------------------------------------------------------------------
    10. Scroll-onthulling
+   Eén terughoudend effect voor de hele site: een korte fade met een minimale
+   verschuiving. Geen richtingsvarianten, geen stagger, geen clipping — dat
+   laatste sneed staarten van letters als g en j af.
    -------------------------------------------------------------------------- */
 [data-reveal] {
   opacity: 0;
-  transform: translate3d(0, 1.75rem, 0);
-  transition: opacity 760ms var(--ease-out), transform 760ms var(--spring);
-  will-change: opacity, transform;
+  transform: translate3d(0, 0.6rem, 0);
+  transition: opacity 380ms var(--ease-out), transform 380ms var(--ease-out);
 }
 [data-reveal].is-in {
   opacity: 1;
   transform: none;
 }
-[data-reveal="left"]  { transform: translate3d(-1.75rem, 0, 0); }
-[data-reveal="right"] { transform: translate3d(1.75rem, 0, 0); }
-[data-reveal="scale"] { transform: scale(0.96); }
-[data-reveal="none"]  { transform: none; }
-
-/* Regel-voor-regel onthulling van koppen */
-.reveal-lines span {
-  display: block;
-  overflow: hidden;
-}
-.reveal-lines span > i {
-  display: block;
-  font-style: inherit;
-  transform: translateY(100%);
-  transition: transform 900ms var(--ease-out);
-}
-.reveal-lines.is-in span > i { transform: translateY(0); }
-.reveal-lines.is-in span:nth-child(2) > i { transition-delay: 80ms; }
-.reveal-lines.is-in span:nth-child(3) > i { transition-delay: 160ms; }
-.reveal-lines.is-in span:nth-child(4) > i { transition-delay: 240ms; }
+/* Koppen verschijnen zonder verschuiving, zodat niets kan afsnijden */
+.display, .h1 { overflow: visible; }
 
 /* --------------------------------------------------------------------------
    11. Toegankelijkheid — voorkeuren van de gebruiker
@@ -1263,11 +1222,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  [data-reveal] { opacity: 1; transform: none; transition: opacity 200ms linear; }
-  .reveal-lines span > i { transform: none; }
-  [data-wipe] { clip-path: none; }
-  .hero__mark, .cta__mark, .ticker__track { transform: none !important; }
-  .scroll-cue__track::after { animation: none; }
+  [data-reveal] { opacity: 1; transform: none; transition: none; }
+  .hero__mark, .cta__mark { transform: none !important; }
 }
 
 @media (prefers-reduced-transparency: reduce) {
@@ -1282,7 +1238,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 
 @media print {
-  .site-header, .mobile-nav, .scrim, .to-top, .progress, .scroll-cue, .cta { display: none !important; }
+  .site-header, .mobile-nav, .scrim, .to-top, .progress, .cta { display: none !important; }
   body { background: #fff; }
   [data-reveal] { opacity: 1 !important; transform: none !important; }
 }
