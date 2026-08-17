@@ -19,6 +19,9 @@
 <meta property="og:image" content="https://www.equusresearch.nl/assets/img/equus-logo.png">
 <meta name="twitter:card" content="summary_large_image">
 
+<link rel="alternate" hreflang="nl" href="https://www.equusresearch.nl/diensten.html">
+<link rel="alternate" hreflang="en" href="https://www.equusresearch.nl/en/services.html">
+<link rel="alternate" hreflang="x-default" href="https://www.equusresearch.nl/diensten.html">
 <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="assets/img/favicon-512.png" sizes="512x512" type="image/png">
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
@@ -41,6 +44,24 @@
 </head>
 <body>
 
+<svg class="flag-sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="flag-nl" viewBox="0 0 9 6">
+    <rect width="9" height="6" fill="#21468B"/>
+    <rect width="9" height="4" fill="#FFFFFF"/>
+    <rect width="9" height="2" fill="#AE1C28"/>
+  </symbol>
+  <symbol id="flag-gb" viewBox="0 0 60 30">
+    <clipPath id="flag-gb-clip">
+      <path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/>
+    </clipPath>
+    <rect width="60" height="30" fill="#012169"/>
+    <path d="M0,0 L60,30 M60,0 L0,30" stroke="#FFFFFF" stroke-width="6"/>
+    <path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#flag-gb-clip)" stroke="#C8102E" stroke-width="4"/>
+    <path d="M30,0 v30 M0,15 h60" stroke="#FFFFFF" stroke-width="10"/>
+    <path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/>
+  </symbol>
+</svg>
+
 <a class="skip-link" href="#main">Naar hoofdinhoud</a>
 <div class="progress" aria-hidden="true"></div>
 
@@ -56,6 +77,16 @@
       <a class="nav__link" data-nav="contact.html" href="contact.html">Contact</a>
     </nav>
     <div class="header-actions">
+  <div class="lang" role="group" aria-label="Taal / Language">
+    <a class="lang__opt" href="diensten.html" hreflang="nl" lang="nl" aria-current="true">
+      <svg class="lang__flag" width="21" height="14" aria-hidden="true"><use href="#flag-nl"/></svg>
+      <span class="lang__label">NL</span>
+    </a>
+    <a class="lang__opt" href="en/services.html" hreflang="en" lang="en">
+      <svg class="lang__flag" width="28" height="14" aria-hidden="true"><use href="#flag-gb"/></svg>
+      <span class="lang__label">EN</span>
+    </a>
+  </div>
       <a class="btn btn--sm" href="contact.html"><span class="btn__label">Plan een consult</span></a>
       <button class="burger" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Menu openen">
         <span></span><span></span><span></span>
@@ -74,6 +105,16 @@
     <span class="btn__label">Plan een consult</span>
     <svg class="btn__arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6"/></svg>
   </a>
+  <div class="lang" role="group" aria-label="Taal / Language">
+    <a class="lang__opt" href="diensten.html" hreflang="nl" lang="nl" aria-current="true">
+      <svg class="lang__flag" width="21" height="14" aria-hidden="true"><use href="#flag-nl"/></svg>
+      <span class="lang__label">NL</span>
+    </a>
+    <a class="lang__opt" href="en/services.html" hreflang="en" lang="en">
+      <svg class="lang__flag" width="28" height="14" aria-hidden="true"><use href="#flag-gb"/></svg>
+      <span class="lang__label">EN</span>
+    </a>
+  </div>
 </nav>
 
 <main id="main">
@@ -451,6 +492,17 @@
           Wetenschappelijk onderzoek, clinics, lezingen en het oplossen van
           (gedrags)problemen bij paarden.
         </p>
+        <h2 class="footer-title" style="margin-top: 1.75rem;">Taal / Language</h2>
+  <div class="lang lang--footer" role="group" aria-label="Taal / Language">
+    <a class="lang__opt" href="diensten.html" hreflang="nl" lang="nl" aria-current="true">
+      <svg class="lang__flag" width="21" height="14" aria-hidden="true"><use href="#flag-nl"/></svg>
+      <span class="lang__label">NL</span>
+    </a>
+    <a class="lang__opt" href="en/services.html" hreflang="en" lang="en">
+      <svg class="lang__flag" width="28" height="14" aria-hidden="true"><use href="#flag-gb"/></svg>
+      <span class="lang__label">EN</span>
+    </a>
+  </div>
       </div>
       <div>
         <h2 class="footer-title">Navigatie</h2>

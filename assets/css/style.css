@@ -338,6 +338,81 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .header-actions .btn { display: none; }
 }
 
+/* --------------------------------------------------------------------------
+   Taalwisselaar — twee vlaggen, staat in de header, het mobiele paneel
+   en de footer. De vlaggen komen uit een inline sprite: geen externe
+   verzoeken en geen dubbele element-id's.
+   -------------------------------------------------------------------------- */
+.flag-sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.lang {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--rule);
+  flex: none;
+}
+
+.lang__opt {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.42rem 0.6rem;
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  transition: background var(--t-fast) var(--ease-out),
+              color var(--t-fast) var(--ease-out);
+}
+.lang__opt + .lang__opt { border-left: 1px solid var(--rule); }
+.lang__opt:hover { background: var(--paper-2); color: var(--ink); }
+.lang__opt:active { background: var(--paper-3); }
+.lang__opt[aria-current="true"] { background: var(--green); color: #fff; }
+
+/* Gelijke hoogte, eigen breedteverhouding — vlaggen worden niet uitgerekt */
+.lang__flag {
+  height: 0.85rem;
+  width: auto;
+  flex: none;
+  display: block;
+  box-shadow: 0 0 0 1px rgba(16, 20, 15, 0.18);
+}
+.lang__opt[aria-current="true"] .lang__flag { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.55); }
+
+/* In de footer niet meerekken met de kolombreedte */
+.lang--footer {
+  align-self: start;
+  justify-self: start;
+  width: fit-content;
+}
+
+/* In het mobiele paneel breed uitgelijnd */
+.mobile-nav .lang { margin-top: 1.25rem; }
+.mobile-nav .lang__opt { flex: 1; justify-content: center; padding-block: 0.7rem; }
+
+/* In de header op zeer smalle schermen alleen de vlaggen. De tekst blijft
+   in de DOM staan — alleen visueel verborgen — zodat de toegankelijke naam
+   van de link "NL" respectievelijk "EN" blijft. */
+@media (max-width: 30rem) {
+  .site-header .lang__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .site-header .lang__opt { padding-inline: 0.55rem; }
+  .site-header .brand img { height: 1.85rem; }
+}
+
 /* Hamburger */
 .burger {
   display: inline-flex;

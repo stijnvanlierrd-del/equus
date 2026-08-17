@@ -8,6 +8,36 @@
   'use strict';
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  /* Teksten volgen de taal van de pagina (<html lang="..">) */
+  var LANG = (document.documentElement.lang || 'nl').slice(0, 2).toLowerCase();
+  var STRINGS = {
+    nl: {
+      required:  'Dit veld is verplicht.',
+      email:     'Vul een geldig e-mailadres in.',
+      consent:   'Ga akkoord om te versturen.',
+      fName:     'Naam',
+      fEmail:    'E-mail',
+      fPhone:    'Telefoon',
+      fSubject:  'Onderwerp',
+      mailSubject: 'Aanvraag via website',
+      sent:      'Je e-mailprogramma is geopend met een vooringevuld bericht. '
+               + 'Verstuur het om je aanvraag af te ronden.'
+    },
+    en: {
+      required:  'This field is required.',
+      email:     'Please enter a valid email address.',
+      consent:   'Please agree in order to send.',
+      fName:     'Name',
+      fEmail:    'Email',
+      fPhone:    'Phone',
+      fSubject:  'Subject',
+      mailSubject: 'Enquiry via website',
+      sent:      'Your email programme has opened with a prefilled message. '
+               + 'Send it to complete your enquiry.'
+    }
+  };
+  var T = STRINGS[LANG] || STRINGS.nl;
   var $  = function (s, c) { return (c || document).querySelector(s); };
   var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
 
@@ -227,15 +257,15 @@
     function validate(field) {
       var value = field.value.trim();
       if (field.required && !value) {
-        setError(field, 'Dit veld is verplicht.');
+        setError(field, T.required);
         return false;
       }
       if (field.type === 'email' && value && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)) {
-        setError(field, 'Vul een geldig e-mailadres in.');
+        setError(field, T.email);
         return false;
       }
       if (field.type === 'checkbox' && field.required && !field.checked) {
-        setError(field, 'Ga akkoord om te versturen.');
+        setError(field, T.consent);
         return false;
       }
       setError(field, '');
@@ -251,7 +281,7 @@
 
       fields.forEach(function (field) {
         if (field.type === 'checkbox' && field.required && !field.checked) {
-          setError(field, 'Ga akkoord om te versturen.');
+          setError(field, T.consent);
           valid = false;
           if (!firstBad) firstBad = field;
           return;
@@ -273,23 +303,22 @@
       };
 
       var lines = [
-        'Naam: ' + get('naam'),
-        'E-mail: ' + get('email'),
-        'Telefoon: ' + (get('telefoon') || '—'),
-        'Onderwerp: ' + get('onderwerp'),
+        T.fName    + ': ' + get('naam'),
+        T.fEmail   + ': ' + get('email'),
+        T.fPhone   + ': ' + (get('telefoon') || '—'),
+        T.fSubject + ': ' + get('onderwerp'),
         '',
         get('bericht')
       ].join('\n');
 
       var mailto = 'mailto:machteld@equusresearch.nl'
-        + '?subject=' + encodeURIComponent('Aanvraag via website — ' + get('onderwerp'))
+        + '?subject=' + encodeURIComponent(T.mailSubject + ' — ' + get('onderwerp'))
         + '&body=' + encodeURIComponent(lines);
 
       window.location.href = mailto;
 
       if (status) {
-        status.textContent = 'Je e-mailprogramma is geopend met een vooringevuld bericht. '
-          + 'Verstuur het om je aanvraag af te ronden.';
+        status.textContent = T.sent;
         status.classList.add('is-visible');
       }
     });
