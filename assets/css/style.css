@@ -395,23 +395,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .mobile-nav .lang { margin-top: 1.25rem; }
 .mobile-nav .lang__opt { flex: 1; justify-content: center; padding-block: 0.7rem; }
 
-/* In de header op zeer smalle schermen alleen de vlaggen. De tekst blijft
-   in de DOM staan — alleen visueel verborgen — zodat de toegankelijke naam
-   van de link "NL" respectievelijk "EN" blijft. */
-@media (max-width: 30rem) {
-  .site-header .lang__label {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    padding: 0;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-  .site-header .lang__opt { padding-inline: 0.55rem; }
-  .site-header .brand img { height: 1.85rem; }
-}
+/* De taalwisselaar staat niet in de header: alleen in het mobiele paneel
+   en in de footer. */
 
 /* Hamburger */
 .burger {
